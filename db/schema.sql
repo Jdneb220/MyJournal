@@ -7,8 +7,8 @@ DROP TABLE IF EXISTS personsToBadges CASCADE;
 CREATE TABLE persons (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
-  first_name VARCHAR(255) NOT NULL,
-  last_name VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
   img VARCHAR(255),
   goals TEXT,
   usdf_num INT,
@@ -32,7 +32,7 @@ CREATE TABLE rides (
   FOREIGN KEY (person_id) REFERENCES persons(id),
     name VARCHAR(255),
   info VARCHAR(255),
-  type VARCHAR(255) NOT NULL,
+  type VARCHAR(255),
   date VARCHAR(255) NOT NULL,
   hours FLOAT
 );

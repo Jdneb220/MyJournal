@@ -48,15 +48,15 @@ var db = pgp('postgres://benjamindejesus@localhost:5432/hart');
 
 
 
-
-
+/* HOME PAGE */
 
 app.get('/', function(req, res){
   if(req.session.user){
     let data = {
      "logged_in": true,
-      "email": req.session.user.email
-    }
+     "name": req.session.user.name,
+      "email": req.session.user.email,
+      }
     res.render('index', data)
   }
   else{
@@ -64,17 +64,19 @@ app.get('/', function(req, res){
   }
 });
 
+
+
 app.post('/login', function(req, res){
   let data = req.body
   db
-    .one("SELECT * FROM users WHERE email = $1", [data.email])
+    .one("SELECT * FROM persons WHERE email = $1", [data.email])
     .catch(function(){
       res.send("Authorization Failed: Invalid email/password")
     })
     .then(function(user){
       bcrypt.compare(
         data.password,
-        user.password_digest,
+        user.password,
           function(err, cmp){
               if(cmp){
                 req.session.user = user
@@ -87,53 +89,162 @@ app.post('/login', function(req, res){
           }
         )
     })
-  //Compare that user's hased pass, to the hash o fthe req.body.email
-  //if match, let user in
-  // if not tell them error
-  // email and/or pass no good
 });
+
+
+/*  HORSES / JOURNALS  */
+app.get('/journals', function(req, res){
+  if(req.session.user)
+    db
+      .any("SELECT * FROM horses WHERE person_id = $1", [req.session.user.id])
+      .then(function(horses){
+          let view_data = {
+            journals: horses
+          }
+          res.render('journals/', view_data)
+      })
+  else
+    res.send('<a href="/">please log in</a>')
+})
+
+
+app.get('/journals/new', function(req, res){
+  if(req.session.user)
+    res.render('journals/new');
+  else
+    res.send('<a href="/">please log in</a>')
+});
+
+app.post('/journals', function(req, res){
+  let data = req.body
+  console.log(data)
+
+  db
+    .none("SELECT * FROM horses WHERE LOWER(name) = LOWER($1) AND person_id = $2", [data.name, req.session.user.id])
+    .then(function(){
+      db
+        .none(
+          "INSERT INTO horses (name, person_id) VALUES ($1, $2)", [data.name, req.session.user.id]
+          )
+        .then(function(e){
+          res.redirect("/")
+        })
+        .catch(function(){
+          res.send('error creating journal')
+        })
+
+    })
+    .catch(function(){
+      res.send("You already have a journal by that name!  <a href='/'>Home</a>")
+    })
+})
+
+
+/*  SIGN UP   */
 
 app.get('/signup', function(req, res){
   res.render('signup/index');
 });
 
+
+let createAccount = function(user){
+  if (validator.isEmail(user.email) || user.password.length < 8)
+  bcrypt
+      .hash(user.password, 10, function(err, hash){
+       console.log(hash)
+        db
+        .none(
+          "INSERT INTO persons (name, email, password) VALUES ($1, $2, $3)", [user.name, user.email, hash]
+          )
+        .then(function(e){
+          console.log('account created')
+        })
+        .catch(function(){
+          console.log('error creating account')
+        })
+      })
+  else
+    console.log('invalid email or password')
+}
+
 app.post('/signup', function(req, res){
   let data = req.body
   console.log(data)
-  bcrypt
-    .hash(data.password, 10, function(err, hash){
-     console.log(hash)
-      db
-      .none(
-        "INSERT INTO users (email, password_digest) VALUES ($1, $2)", [data.email, hash]
-        )
-      .then(function(){
-          res.send("User created!")
-        })
 
+  db
+    .none("SELECT email FROM persons WHERE LOWER(email) = LOWER($1)", [data.email])
+    .then(function(){
+      let user_data = {
+        name: data.name,
+        email: data.email,
+        password: data.password
+      }
+      createAccount(user_data)
+      res.redirect("/")
     })
+    .catch(function(){
+      console.log
+      res.render("signup/index", {err:"Email already exists in the database"})
+    })
+})
+
+
+
+
+/*  BADGES  */
+
+app.get('/badges/my', function(req, res){
+  if(req.session.user){
+    let data = {
+     "logged_in": true,
+     "name": req.session.user.name,
+      "email": req.session.user.email
+    }
+    db
+      .any("SELECT * FROM personsToBadges JOIN badges ON personsToBadges.badge_id = badges.id WHERE personsToBadges.person_id = " + req.session.user.id)
+      .then(function(data){
+          let view_data = {
+            title: 'Badges for ' + req.session.user.name,
+            badges: data
+          }
+          res.render('badges/index', view_data)
+        }
+      )
+  }
+  else{
+    console.log('not logged in')
+  }
 });
 
-// db
-  //   .none("SELECT email FROM users WHERE email = $1", [data.email])
-  //   .catch(function(){
-  //     res.send("Email already exists in the database")
-  //   })
-  //   .then(function(){
-  //     let hash = bcrypt.hashSync(data.password, salt)
-  //     db
-  //       .none("INSERT INTO users (email, password) VALUES (" + data.email + "," + hash + ")")
-  //       .catch(function(){
-  //         res.send('Could not add user to db')
-  //       })
-  //       .then(function(){
-  //        // res.render('index')
-  //       })
-  //   })
+app.get('/badges/', function(req, res){
+  if(req.session.user){
+    // let data = {
+    //  "logged_in": true,
+    //  "name": req.session.user.name,
+    //   "email": req.session.user.email
+    // }
+    db
+      .any("SELECT * FROM badges")
+      .then(function(data){
+          let view_data = {
+            title: 'All Badges',
+            badges: data
+          }
+          res.render('badges/index', view_data)
+        }
+      )
+  }
+  else{
+    console.log('not logged in')
+  }
+});
+
+
+
 
 app.put('/user', function(req,res){
   db
-  .none("UPDATE users SET email = $1 WHERE email = $2", [req.body.email, req.session.user.email])
+  .none("UPDATE persons SET email = $1 WHERE email = $2", [req.body.email, req.session.user.email])
   .catch(function(){
     res.send('fail.')
   })
@@ -144,7 +255,7 @@ app.put('/user', function(req,res){
 
 app.get('/logout', function(req, res){
     req.session.user = false
-    res.redirect("/")
+    res.render("index")
 });
 
 app.listen(3000, function () {

@@ -5,11 +5,42 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>HART</title>
   <link rel="stylesheet" href="">
+  <script src="/js/jquery.js" type="text/javascript"></script>
+  <script src="/js/scripts.js" type="text/javascript"></script>
 </head>
 <body>
-  <h1>HART</h1>
+  <nav>
+    <ul>
+    <li><a href="/journals/">Journals</a></li>
+    <li><a href="/logs/">Entries</a></li>
+    <li><a href="/badges/">Badges</a></li>
+    </ul>
+  </nav>
+
+  <h1>Welcome to HART</h1>
   <h2>Horse and Rider Together Program</h2>
   <p>Created and mainted by the United States Dressage Federation, Horse and Rider Together or HART is a tool for all members to record and share their daily riding activities. The online training journal allows participants to track their rides over time, share how their ride went with friends and earn achievements based on the number of hours spent in the saddle.</p>
+
+  {{#logged_in}}
+    <h2>Welcome {{name}}!</h2>
+    <div id="journals">
+    </div>
+
+
+
+
+    <p><a href="/logout">Logout</a></p>
+  {{/logged_in}}
+  {{^logged_in}}
+  <form method="POST" action="/login">
+    <label for="email">Email</label>
+    <input type="text" name="email" id="email" />
+    <label for="password">Password</label>
+    <input type="text" name="password" id="password" />
+    <input type="submit" value="Submit" />
+  </form>
+  <p>Not a member? <a href="/signup">Sign Up!</a></p>
+  {{/logged_in}}
 
 </body>
 </html>
