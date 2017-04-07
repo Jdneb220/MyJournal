@@ -1,7 +1,7 @@
 <h3>Your Journals:</h3>
     <ul>
       {{#journals}}
-        <li><a href="/journals/{{id}}">{{name}}</a></li>
+        <li><a href="/journal/{{id}}">{{name}}</a>: <a href="/journal/{{id}}">Update</a> <a href="/journal/{{id}}?_method=DELETE">Delete</a></li>
       {{/journals}}
     </ul>
 <a href="/journals/new">Create a new journal</a>

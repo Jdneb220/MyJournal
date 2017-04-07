@@ -1,9 +1,11 @@
 $(function() {
   $.ajax({
-    url: "journals",
-    cache: false
-  })
+      url: "journals",
+      mathod: "GET",
+      cache: false
+    })
   .done(function( html ) {
-    $( "#journals" ).append( html );
-  });
+      $( "#journals" ).append( html );
+    });
+
 });

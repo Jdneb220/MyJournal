@@ -1,17 +1,3 @@
-// things to do
-// not login with email and password
-// first name
-// last name
-// username
-// birthday
-
-// store data
-// see how it gets passed
-// see ho edit form required
-
-// edit form on separate page
-
-
 const express = require('express');
 const app = express();
 var methodOverride = require('method-override')
@@ -23,9 +9,7 @@ const session = require('express-session');
 
 const validator = require('validator');
 
-/* BCrypt stuff here */
 const bcrypt = require('bcrypt');
-const salt = bcrypt.genSalt(10);
 
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
@@ -69,7 +53,7 @@ app.get('/', function(req, res){
 app.post('/login', function(req, res){
   let data = req.body
   db
-    .one("SELECT * FROM persons WHERE email = $1", [data.email])
+    .one("SELECT * FROM persons WHERE email = $1;", [data.email])
     .catch(function(){
       res.send("Authorization Failed: Invalid email/password")
     })
@@ -92,11 +76,50 @@ app.post('/login', function(req, res){
 });
 
 
+
+
+
+
 /*  HORSES / JOURNALS  */
+
+
+app.get('/journal/:id', function(req, res){
+  if(req.session.user)
+    db.tx(t => {
+      let queries = [
+        t.one("SELECT * FROM horses WHERE id = $1;", [parseInt(req.params.id)]),
+        t.any("SELECT * FROM rides  WHERE horse_id = $1;", [parseInt(req.params.id)])
+      ]
+      return t.batch(queries)
+      })
+      .then(function(data){
+          let view_data = {
+            journal: data[0],
+            logs: data[1]
+          }
+          res.render('journals/edit', view_data)
+      })
+  else
+    res.send('<a href="/">please log in</a>')
+})
+
+app.put('/journal/:id', function(req,res){
+  db
+  .none("UPDATE horses SET name = $1 WHERE id = $2;", [req.body.name, parseInt(req.params.id)])
+  .catch(function(){
+    res.send('fail.')
+  })
+  .then(function(){
+    res.send('Jounral updated.  <a href="/">home</a>')
+  })
+})
+
+
+
 app.get('/journals', function(req, res){
   if(req.session.user)
     db
-      .any("SELECT * FROM horses WHERE person_id = $1", [req.session.user.id])
+      .any("SELECT * FROM horses WHERE person_id = $1;", [req.session.user.id])
       .then(function(horses){
           let view_data = {
             journals: horses
@@ -118,13 +141,12 @@ app.get('/journals/new', function(req, res){
 app.post('/journals', function(req, res){
   let data = req.body
   console.log(data)
-
   db
-    .none("SELECT * FROM horses WHERE LOWER(name) = LOWER($1) AND person_id = $2", [data.name, req.session.user.id])
+    .none("SELECT * FROM horses WHERE LOWER(name) = LOWER($1) AND person_id = $2;", [data.name, req.session.user.id])
     .then(function(){
       db
         .none(
-          "INSERT INTO horses (name, person_id) VALUES ($1, $2)", [data.name, req.session.user.id]
+          "INSERT INTO horses (name, person_id) VALUES ($1, $2);", [data.name, req.session.user.id]
           )
         .then(function(e){
           res.redirect("/")
@@ -138,6 +160,108 @@ app.post('/journals', function(req, res){
       res.send("You already have a journal by that name!  <a href='/'>Home</a>")
     })
 })
+
+
+/*  RIDES / LOGS  */
+app.get('/logs', function(req, res){
+  if(req.session.user)
+    db
+      .any("SELECT * FROM rides WHERE person_id = $1;", [req.session.user.id])
+      .then(function(data){
+          let view_data = {
+            logs: data
+          }
+          res.render('logs/', view_data)
+      })
+  else
+    res.send('<a href="/">please log in</a>')
+})
+
+
+app.post('/logs', function(req, res){
+  if(req.session.user) {
+    let data = req.body
+    db.tx(t => {
+      let queries = [
+        t.one("INSERT INTO rides (horse_id, person_id, date, hours, info, type) VALUES ($1, $2, $3, $4, $5, $6) returning id;", [data.horse_id, req.session.user.id, data.date, data.hours, data.info, data.type]),
+      ]
+      return t.batch(queries)
+      })
+      .then(function(data){
+          console.log(data)
+          res.send('log created')
+      })
+      .catch(function(){
+        res.send('could not create log')
+      })
+    }
+  else
+    res.send('<a href="/">please log in</a>')
+})
+
+
+app.get('/logs/new/:id', function(req, res){
+  if(req.session.user)
+    db
+      .tx(t => {
+      let queries = [
+        t.one("SELECT * FROM horses WHERE person_id = $1 AND id = $2;", [req.session.user.id, parseInt(req.params.id)]),
+        t.any("SELECT * FROM horses WHERE person_id = $1;", [req.session.user.id])
+      ]
+      return t.batch(queries)
+      })
+      .then(function(data){
+        let view_data = {
+          name: data[0].name,
+          journals: data[1]
+        }
+        res.render('logs/new', view_data);
+      })
+      .catch(function(){
+        res.send('No journals yet.  Please <a href="/journals/">create a journal</a>')
+      })
+  else
+    res.send('<a href="/">please log in</a>')
+})
+
+app.get('/logs/new', function(req, res){
+  res.send('please select a <a href="/journals/">journal</a>')
+  // if(req.session.user)
+  //   db
+  //     .any("SELECT * FROM horses WHERE person_id = $1;", [req.session.user.id])
+  //     .then(function(data){
+  //       let view_data = {
+  //         name: 'Select a journal',
+  //         journals: data
+  //       }
+  //       console.log(view_data)
+  //       res.render('logs/new', view_data);
+  //     })
+  //     .catch(function(){
+  //       res.send('No journals yet.  Please <a href="/journals/">create a journal</a>')
+  //     })
+  // else
+  //   res.send('<a href="/">please log in</a>')
+})
+
+app.put('/log/:id', function(req,res){
+        // t.one("INSERT INTO rides (horse_id, person_id, date, hours, info, type) VALUES horse_id = $1, person_id = $2, date = $3 hours = $4, info = $5, type = $6", [data.horse_id, req.session.user.id, data.date, data.hours, data.info, data.type]),
+})
+
+app.get('/log/:id', function(req, res){
+  if(req.session.user)
+    db
+      .one("SELECT * FROM rides WHERE id = $1;", [parseInt(req.params.id)])
+      .then(function(data){
+          let view_data = {
+            logs: data
+          }
+          res.render('logs/edit', view_data)
+      })
+  else
+    res.send('<a href="/">please log in</a>')
+})
+
 
 
 /*  SIGN UP   */
@@ -217,12 +341,6 @@ app.get('/badges/my', function(req, res){
 });
 
 app.get('/badges/', function(req, res){
-  if(req.session.user){
-    // let data = {
-    //  "logged_in": true,
-    //  "name": req.session.user.name,
-    //   "email": req.session.user.email
-    // }
     db
       .any("SELECT * FROM badges")
       .then(function(data){
@@ -233,25 +351,11 @@ app.get('/badges/', function(req, res){
           res.render('badges/index', view_data)
         }
       )
-  }
-  else{
-    console.log('not logged in')
-  }
 });
 
 
 
 
-app.put('/user', function(req,res){
-  db
-  .none("UPDATE persons SET email = $1 WHERE email = $2", [req.body.email, req.session.user.email])
-  .catch(function(){
-    res.send('fail.')
-  })
-  .then(function(){
-    res.send('Email updated')
-  })
-})
 
 app.get('/logout', function(req, res){
     req.session.user = false

@@ -1,7 +1,7 @@
-<h3></h3>
+<h3>Make a journal entry</h3>
   <form method="POST" action="/logs">
     <div id="log-pg-1">
-      <label for="date">Cool!  When's the last time you <!--rode on-->did {{id}}?</label>
+      <label for="date">Cool!  When's the last time you <!--rode on-->did {{name}}?</label>
       <input type="text" name="date" id="date" />
       <label for="hours">and for how long?</label>
       <input type="text" name="hours" id="hours" />
@@ -9,8 +9,15 @@
     <div id="log-pg-1">
       <label for="info">Neat!  Jot some notes about your journal entry.  You can also give it a <a href="typeModal">category</a>.</label>
       <input type="text" name="info" id="info" />
-      <input type="text" name="type" id="type" />
+      <select name="typeSelect" id="typeSelect">
+        <option value="rec">Recreational</option>
+        <option value="rec">Competitive</option>
+        <option value="rec">Practice</option>
+        <option value="rec">Clinic/Lessons</option>
+      </select>
+      <input type="hidden" name="type" id="type" />
     </div>
 
       <input type="submit" value="Create a Log Entry">
   </form>
+
