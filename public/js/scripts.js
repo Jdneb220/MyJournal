@@ -11,4 +11,15 @@ $(function() {
   setTimeout(function(){
     $('.card-panel.myRed').fadeOut()
   }, 2000)
+
+  $.ajax({
+      url: "stats/users",
+      mathod: "GET",
+      cache: false
+    })
+  .done(function( html ) {
+      $( "#user_stats" ).append( html );
+    });
+
 });
+

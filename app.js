@@ -10,7 +10,6 @@ const session = require('express-session');
 
 const validator = require('validator');
 var moment = require('moment');
-
 const bcrypt = require('bcrypt');
 
 app.engine('html', mustacheExpress());
@@ -427,6 +426,60 @@ app.get('/badges/', function(req, res){
 
 
 
+/* STATS / GOOGLE CHARTS */
+
+app.get('/stats/index', function(req, res){
+    if(req.session.user){
+    db
+      .tx(t => {
+      let queries = [
+        t.any("SELECT SUM(hours) as hours, date FROM rides GROUP BY date ORDER BY date ASC;"),
+        t.any("SELECT SUM(hours) as hours, date FROM rides WHERE person_id = " + req.session.user.id + " GROUP BY date ORDER BY date ASC;"),
+        t.any("SELECT SUM(hours) as hours, horses.name FROM rides JOIN horses ON rides.horse_id = horses.id WHERE rides.person_id = " + req.session.user.id + " GROUP BY horses.name ORDER BY hours ASC;")
+      ]
+      return t.batch(queries)
+      })
+      .then(function(data){
+          let view_data = {
+            logsPerDay: data[0].map(function(x){return "["+x.hours+", " + moment(x.date).format("YYYY, M, D")+"]"}),
+            myLogsPerDay: data[1].map(function(x){return "["+x.hours+", " + moment(x.date).format("YYYY, M, D")+"]"}),
+            myHoursPerJournal: data[2].map(function(x){return "["+x.hours+", \"" + x.name+"\"]"})
+          }
+          res.render('stats/index', view_data)
+        }
+      )
+      .catch(function(){
+        res.send('error')
+      })
+    }
+    else
+      res.send('please log in')
+});
+
+
+app.get('/stats/users', function(req, res){
+    db
+      .tx(t => {
+      let queries = [
+        t.one("SELECT COUNT(*) AS count FROM persons;"),
+        t.one("SELECT COUNT(*) AS count FROM horses;"),
+        t.one("SELECT COUNT(*) AS count FROM rides;")
+      ]
+      return t.batch(queries)
+      })
+      .then(function(data){
+          let view_data = {
+            num_users: data[0].count,
+            num_journals: data[1].count,
+            num_logs: data[2].count
+          }
+          res.render('stats/users', view_data)
+        }
+      )
+      .catch(function(){
+        res.send('error')
+      })
+});
 
 
 app.get('/logout', function(req, res){

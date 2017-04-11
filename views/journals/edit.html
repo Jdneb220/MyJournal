@@ -25,8 +25,8 @@
 
 
 <div class="container">
-<h1>{{journal.name}} <a id="update_button" onclick='$("#are_you_sure").hide(); $("#journal_delete_btn").show();'class="btn waves-effect waves-light" href="#modal1"><i class="material-icons right">mode_edit</i></a>
-</h1>
+  <h1>{{journal.name}} <a id="update_button" onclick='$("#are_you_sure").hide(); $("#journal_delete_btn").show();'class="btn waves-effect waves-light" href="#modal1"><i class="material-icons right">mode_edit</i></a>
+  </h1>
 
 
   <!-- Modal Structure -->
@@ -52,11 +52,11 @@
   </div>
 
 
-<div id="journal_logs">
-</div>
+  <div id="journal_logs">
+  </div>
 
-<div id="journal_entry">
-</div>
+  <div id="journal_entry">
+  </div>
 
 
 </div>
@@ -135,10 +135,11 @@ $(function() {
               else
                 $('#flippage_btn').hide()
             },
-            selectMonths: false, // Creates a dropdown to control month
+            selectMonths: true, // Creates a dropdown to control month
 
             // An integer (positive/negative) sets it relative to today.
             min: -15,
+
             // `true` sets it to today. `false` removes any limits.
             max: true,
             container: '.container'

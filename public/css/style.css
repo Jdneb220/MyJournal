@@ -8,8 +8,12 @@ body, .modal-content{
 }
 
 .container{
-  margin-top:2em;
   padding: 2em 4em;
+}
+
+.chart {
+  width: 100%;
+  min-height: 450px;
 }
 
 #journal_entry{

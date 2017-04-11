@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>MyJournal</title>
+  <link rel="stylesheet" href="">
+  <!--Import Google Icon Font-->
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="/css/benmaterialize.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/style.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/magic/magic.min.css"  media="screen,projection"/>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/materialize.js"></script>
+
+  <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      function returnHoursLoggedArrayFromJSON() {
+
+
+        let JSON_data2 = '{{myLogsPerDay}}'
+
+        let JSON_data1 = '{{logsPerDay}}'
+
+        JSON_data1 = JSON_data1.replace(/&quot;/gi, '"');
+        JSON_data2 = JSON_data2.replace(/&quot;/gi, '"');
+
+        var array1 = JSON.parse("[" + JSON_data1 + "]");
+        var array2 = JSON.parse("[" + JSON_data2 + "]");
+
+        let answer = [['Date', 'All Users', 'Me']]
+         array1.forEach(function(x, index){
+           temp = [];
+
+           temp.push(new Date(x[1],x[2]-1,x[3]))
+           temp.push(x[0])
+           temp.push(array2[index][0])
+           answer.push(temp)
+         })
+
+        return answer
+      }
+
+      function returnHoursPerJournalFromJSON() {
+
+
+        let JSON_data1 = '{{myHoursPerJournal}}'
+
+        JSON_data1 = JSON_data1.replace(/&quot;/gi, '"');
+
+        var array1 = JSON.parse("[" + JSON_data1 + "]");
+
+        let answer = [['Journals', 'Hours']]
+         array1.forEach(function(x, index){
+           temp = [];
+
+           temp.push(x[1])
+           temp.push(x[0])
+           answer.push(temp)
+         })
+
+        return answer
+      }
+
+      google.charts.load('current', {'packages':['corechart']});
+
+      google.charts.setOnLoadCallback(drawChart);
+
+      google.charts.setOnLoadCallback(drawChart2);
+
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(returnHoursLoggedArrayFromJSON()
+          );
+
+        var options = {
+          curveType: 'function',
+          legend: { position: 'bottom' },
+
+          vAxis: {title: 'Hours Logged', titleTextStyle: {color: 'red'}},
+          pointSize: 5
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
+
+      }
+
+      function drawChart2() {
+        var data = google.visualization.arrayToDataTable(returnHoursPerJournalFromJSON()
+          );
+
+        var options = {
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          pointSize: 5
+        };
+
+        var chart2 = new google.visualization.BarChart(document.getElementById('chart_div2'));
+
+        chart2.draw(data, options);
+
+
+      }
+
+
+      $(window).resize(function(){
+        drawChart();
+        drawChart2();
+      });
+
+    </script>
+
+</head>
+
+<body>
+
+
+
+
+
+
+<div class="container">
+{{logsPerDay}}
+<br>
+{{myLogsPerDay}}
+<br>
+{{myHoursPerJournal}}
+<br><br>
+
+<h3>Hours Logged Per Day</h3>
+<div id="chart_div" class="chart"></div>
+<h3>My Hours Per Joural</h3>
+<div id="chart_div2" class="chart"></div>
+
+
+</div>
+
+<script>
+/*
+let data = {{data}}
+let JSON = data.map(function(x){return x.info + ',' +x.hours})
+$('.container').append(JSON)
+*/
+</script>
+
+<!--Div that will hold the pie chart-->
+
+
+</body>
+
+<script>
+/*
+  $.ajax({
+  dataType: "json",
+  url: url,
+  data: data,
+  success: success
+});*/
+
+</script>
+</html>
