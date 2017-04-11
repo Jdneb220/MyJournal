@@ -5,62 +5,129 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title></title>
   <link rel="stylesheet" href="">
-  <script src="/js/jquery.js" type="text/javascript"></script>
-  <script src="/js/scripts.js" type="text/javascript"></script>
+  <!--Import Google Icon Font-->
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="/css/benmaterialize.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/style.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/magic/magic.min.css"  media="screen,projection"/>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
+
 <body>
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/materialize.js"></script>
 
 
 
 
-<h1>{{journal.name}}</h1>
-<h2>Logs:</h2>
+<div class="container">
+<h1>{{journal.name}} <a id="update_button" class="btn waves-effect waves-light" href="#modal1"><i class="material-icons right">mode_edit</i></a>
+</h1>
 
-<table>
-<thead>
-<tr><th>Date</th><th>Hours</th><th>Category</th><th>Notes</th><th>Modify</th></tr>
-</thead>
-<tbody>
-  {{#logs}}
-    <tr><td>{{date}}</td><td>{{hours}}</td>{{type}}</td><td>{{info}}</td><td>
-      <a href="log/{{id}}">Update</a>
-      <a href="log/{{id}}?_method=DELETE">X</a>
-    </td></tr>
-  {{/logs}}
-  {{^logs}}
-    <tr><td colspan=5>This journal is empty.  Fill it with logs!</td></tr>
-  {{/logs}}
-</tbody>
-</table>
 
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Update the name of this journal</h4>
+        <form id="journal_update" method="POST" action="/journal/{{journal.id}}?_method=PUT">
+            <input type="text" name="name" id="name" value="{{journal.name}}" />
+        </form>
+        <form id="journal_delete" method="POST" action="/journal/{{journal.id}}?_method=DELETE">
+        </form>
+
+    </div>
+    <div class="modal-footer">
+      <a onclick="$('#journal_update').submit
+      ()" class="waves-effect waves-green btn-flat">Update</a>
+      <a onclick='$("#journal_delete").submit
+      ()' class="waves-effect waves-red btn-flat">Delete</a>
+    </div>
+  </div>
+
+
+<div id="journal_logs">
+</div>
 
 <div id="journal_entry">
+</div>
+
 
 </div>
-<!--
-<p><a href="/logs/new/{{journal.id}}">Create a new {{journal.name}} log</a></p>
--->
 
-  <form method="POST" action="/journal?_method=PUT">
-    <div id="journal-pg-1">
-      <label for="name">Update the name of this journal:</label>
-      <input type="text" name="name" id="name" value="{{journal.name}}" />
-      <input type="submit" value="Update">
-  </form>
-  <a href="/journal/{{journal.id}}?_method=DELETE">Delete</a>
+ <div class="fixed-action-btn">
+    <a class="btn-floating btn-large myRed">
+      <i class="large material-icons">view_headline</i>
+    </a>
+    <ul>
+      <li><a class="btn-floating green" href="/"><i class="material-icons">perm_identity</i> Home</a></li>
+      <li><a class="btn-floating yellow darken-1" href="/logs/"><i class="material-icons">mode_edit</i> Post</a></li>
+      <li><a class="btn-floating red" href="/logout/"><i class="material-icons">power_settings_new</i> Logout</a></li>
+    </ul>
+  </div>
+
 
 </body>
 <script>
-// $(function() {
-//   $.ajax({
-//       url: "/logs/new/{{journal.id}}",
-//       method: "GET",
-//       cache: false,
-//       success: function(html) {
-//         $("#journal_entry").append( html );
-//       }
-//     })
-// }
+$(function() {
+
+  $('.modal').modal();
+
+
+  $.ajax({
+      url: "/logs/{{journal.id}}",
+      method: "GET",
+      cache: false,
+      success: function(html) {
+        $("#journal_logs").append( html ).addClass('magictime boingInUp');
+        console.log('here');
+      }
+  })
+
+  $.ajax({
+      url: "/logs/new/{{journal.id}}",
+      method: "GET",
+      cache: false,
+      success: function(html) {
+        $("#journal_entry").append( html );
+        console.log('here');
+        let $input = $('.datepicker').pickadate({
+            format: 'mmmm d, yyyy',
+            onSet: function( arg ){
+                if ( 'select' in arg ){ //prevent closing on selecting month/year
+                    this.close();
+                }
+            },
+            selectMonths: false, // Creates a dropdown to control month
+
+            // An integer (positive/negative) sets it relative to today.
+            min: -15,
+            // `true` sets it to today. `false` removes any limits.
+            max: true,
+            container: '.container'
+          });
+      }
+  })
+
+/*
+  setTimeout(function(){
+      $('#journal_entry').fadeIn().addClass('magictime boingInUp');
+  }, 1000);
+*/
+
+})
+
+  let flippage = function(){
+      $('#log-pg-1').parent().css('height', $('#log-pg-1').css('height'))
+      $('#log-pg-1').addClass('spaceOutLeft').hide();
+      setTimeout(function(){
+        $('#log-pg-2').show().addClass('magictime spaceInRight');
+      }, 200)
+  }
+
 </script>
 </html>
 

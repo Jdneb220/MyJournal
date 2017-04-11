@@ -5,42 +5,84 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>HART</title>
   <link rel="stylesheet" href="">
-  <script src="/js/jquery.js" type="text/javascript"></script>
-  <script src="/js/scripts.js" type="text/javascript"></script>
-</head>
-<body>
-  <nav>
-    <ul>
-    <li><a href="/journals/">Journals</a></li>
-    <li><a href="/logs/">Entries</a></li>
-    <li><a href="/badges/">Badges</a></li>
-    </ul>
-  </nav>
+<!--Import Google Icon Font-->
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="/css/benmaterialize.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/magic/magic.min.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/style.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/home.css"  media="screen,projection"/>
 
-  <h1>Welcome to HART</h1>
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/materialize.js"></script>
+  <script src="/js/scripts.js" type="text/javascript"></script>
+
+
+ <video playsinline autoplay muted loop poster="1.png" id="bgvid">
+    <source src="1.mp4" type="video/mp4">
+</video>
+
+<div class="fixed-action-btn toolbar">
+    <a class="btn-floating btn-large myRed"">
+      <i class="large material-icons">view_headline</i>
+    </a>
+    <ul>
+      <li class="waves-effect waves-light"><a href="/journals/new"><i class="material-icons">library_add</i>Add a Journal</a></li>
+      <li class="waves-effect waves-light"><a href="/badges/"><i class="material-icons">mode_edit</i> Record a log</a></li>
+      <li class="waves-effect waves-light"><a href="/logout"><i class="material-icons">call_made</i>Logout</a></li>
+    </ul>
+  </div>
+
+  <!--
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">HART</a>
+      <ul id="nav-mobile" class="right hide-on-sm-and-down">
+        <li><a href="/journals/">Journals</a></li>
+        <li><a href="/logs/">Entries</a></li>
+        <li><a href="/badges/">Badges</a></li>
+      </ul>
+    </div>
+  </nav>
+  -->
+
+  <div class="container">
+  <h1>Welcome to MyJournal</h1>
+  <p>Track your daily activities over time, share what you do with others, and earn achivements for hours logged.</p>
+  <!--
   <h2>Horse and Rider Together Program</h2>
-  <p>Created and mainted by the United States Dressage Federation, Horse and Rider Together or HART is a tool for all members to record and share their daily riding activities. The online training journal allows participants to track their rides over time, share how their ride went with friends and earn achievements based on the number of hours spent in the saddle.</p>
+  <p>Created and maintained by the United States Dressage Federation, Horse and Rider Together or HART is a tool for all members to record and share their daily riding activities. The online training journal allows participants to track their rides over time, share how their ride went with friends and earn achievements based on the number of hours spent in the saddle.</p>
+  -->
 
   {{#logged_in}}
     <h2>Welcome {{name}}!</h2>
+
     <div id="journals">
     </div>
 
-
-
-
-    <p><a href="/logout">Logout</a></p>
   {{/logged_in}}
+
+
+
   {{^logged_in}}
   <form method="POST" action="/login">
-    <label for="email">Email</label>
+    <label for="email">Email
     <input type="text" name="email" id="email" value="jdneb@hotmail.com"/>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" value="dejesus"/>
-    <input type="submit" value="Submit" />
+    </label>
+    <label for="password">Password
+    <input type="password" name="password" id="password" value="password"/>
+    </label>
+    <input class='btn' type="submit" value="Submit" />
   </form>
   <p>Not a member? <a href="/signup">Sign Up!</a></p>
   {{/logged_in}}
 
+  </div>
 </body>
 </html>

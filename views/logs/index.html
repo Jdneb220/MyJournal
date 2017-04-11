@@ -1,7 +1,19 @@
-<h3>Your Logs:</h3>
-    <ul>
-      {{#logs}}
-        <li><a href="/log/{{id}}">{{name}}</a>: <a href="/log/{{id}}">Update</a> <a href="/log/{{id}}?_method=DELETE">Delete</a></li>
-      {{/logs}}
-    </ul>
-<a href="/logs/new">Create a new log</a>
+<h2>Logs:</h2>
+
+<table class='centered'>
+<thead>
+<tr><th>Date</th><th>Hours</th><!--<th>Category</th>--><th>Notes</th><th>Modify</th></tr>
+</thead>
+<tbody>
+  {{#logs}}
+    <tr><td>{{date}}</td><td>{{hours}}</td><!--<td>{{type}}</td>--><td>{{info}}</td><td>
+      <form method="POST" action="/log/{{id}}?_method=DELETE">
+        <button class='btn' type="submit">Delete</button>
+      </form>
+    </td></tr>
+  {{/logs}}
+  {{^logs}}
+    <tr><td colspan=4>This journal is empty.  Fill it with logs!</td></tr>
+  {{/logs}}
+</tbody>
+</table>

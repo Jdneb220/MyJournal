@@ -1,7 +1,36 @@
-<h3>Let's start a journal:</h3>
-  <form method="POST" action="/journals">
-    <div id="journal-pg-1">
-      <label for="name">Tell us an activity you'd like to journal about:</label>
-      <input type="text" name="name" id="name" />
-      <input type="submit" value="Create a Journal">
-  </form>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <link rel="stylesheet" href="">
+  <!--Import Google Icon Font-->
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="/css/benmaterialize.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/style.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/magic/magic.min.css"  media="screen,projection"/>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+</head>
+
+<body>
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/materialize.js"></script>
+
+<div class='container'>
+
+  <h3>Let's start a journal:</h3>
+    <form method="POST" action="/journals">
+        <label for="name">Tell us an activity you'd like to journal about:</label>
+        <input type="text" name="name" id="name" />
+        <input class='btn' type="submit" value="Create a Journal">
+    </form>
+
+</div>
+</body>
+</html>

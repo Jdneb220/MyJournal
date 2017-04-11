@@ -1,23 +1,73 @@
-<h3>Make a journal entry</h3>
-  <form method="POST" action="/logs">
+
+  <style>
+  h3, #log-pg-1, #log-pg-2{
+    display:none;
+  }
+
+  </style>
+
+
+
+  <h3>Let's make a journal entry</h3>
+  <form method="POST" action="/log/new/{{id}}">
     <div id="log-pg-1">
-      <label for="date">Cool!  When's the last time you <!--rode on-->did {{name}}?</label>
-      <input type="text" name="date" id="date" />
-      <label for="hours">and for how long?</label>
-      <input type="text" name="hours" id="hours" />
+      <label for="date">Cool!  When's the last time you <!--rode on-->did the {{name}}?</label>
+      <input type="date" name="date" id="date" class="datepicker">
+      <label for="hours">and for how many hours?</label>
+      <p class="range-field">
+        <input type="range" name="hours" min="0" max="24" step="0.5" value="2" id="hours" />
+      </p>
+      <a href="#" onClick="flippage()" class='btn'>Continue</a>
     </div>
-    <div id="log-pg-1">
+    <div id="log-pg-2">
       <label for="info">Neat!  Jot some notes about your journal entry.  You can also give it a <a href="typeModal">category</a>.</label>
       <input type="text" name="info" id="info" />
-      <select name="typeSelect" id="typeSelect">
-        <option value="rec">Recreational</option>
-        <option value="rec">Competitive</option>
-        <option value="rec">Practice</option>
-        <option value="rec">Clinic/Lessons</option>
+      <select name="type" id="type">
+        <option value="Recreational">Recreational</option>
+        <option value="Competitive">Competitive</option>
+        <option value="Practice">Practice</option>
+        <option value="Clinic/Lessons">Clinic/Lessons</option>
       </select>
-      <input type="hidden" name="type" id="type" />
+            <input class='btn' type="submit" value="Create a Log Entry">
     </div>
-
-      <input type="submit" value="Create a Log Entry">
   </form>
+
+
+<script>
+  setTimeout(function(){
+      $('h3').fadeIn().addClass('magictime boingInUp');
+  }, 1000);
+  setTimeout(function(){
+      $('#log-pg-1').fadeIn().addClass('magictime boingInUp');
+      setTimeout(function(){
+        $('.range-field').append('<span class="thumb"><span class="value">2</span></span>')
+        $('.thumb').velocity({ height: "30px", width: "30px", top: "-30px", marginLeft: "5px"}, { duration: 300, easing: 'easeOutExpo' });
+        console.log($('input[type=range]').width(), ",", $('input[type=range]').attr('max'))
+        $('.thumb').addClass('active').css('left', 2*$('input[type=range]').width() / $('input[type=range]').attr('max')-1);
+      },200)
+  }, 1500);
+
+
+
+
+
+
+/*
+  let childrenCounter = 0
+  let nInterval
+  nInterval = setInterval(function(){
+    $($('#log-pg-1').children()[childrenCounter]).addClass('magictime boingInUp')
+    childrenCounter++
+    if (childrenCounter >= $('#log-pg-1').children().length)
+      clearInterval(nInterval)
+  },200)
+*/
+
+  /*
+  while (childrenCounter < $('#log-pg-1').children().length){
+    $('#log-pg-1').children()[childrenCounter]
+    childrenCounter++
+  }
+  */
+</script>
 

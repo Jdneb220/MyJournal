@@ -1,7 +1,8 @@
 <h3>Your Journals:</h3>
-    <ul>
+
       {{#journals}}
-        <li><a href="/journal/{{id}}">{{name}}</a>: <a href="/journal/{{id}}">Update</a> <a href="/journal/{{id}}?_method=DELETE">Delete</a></li>
+        <a class='btn waves-effect waves-light' href="/journal/{{id}}">{{name}}</a>
+
+
       {{/journals}}
-    </ul>
-<a href="/journals/new">Create a new journal</a>
+

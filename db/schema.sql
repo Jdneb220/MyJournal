@@ -27,13 +27,12 @@ CREATE TABLE horses (
 CREATE TABLE rides (
   id SERIAL PRIMARY KEY,
   horse_id INT,
-  FOREIGN KEY (horse_id) REFERENCES horses(id),
+  FOREIGN KEY (horse_id) REFERENCES horses(id) ON DELETE CASCADE,
   person_id INT,
-  FOREIGN KEY (person_id) REFERENCES persons(id),
-    name VARCHAR(255),
+  FOREIGN KEY (person_id) REFERENCES persons(id) ON DELETE CASCADE,
   info VARCHAR(255),
   type VARCHAR(255),
-  date VARCHAR(255) NOT NULL,
+  date TIMESTAMP NOT NULL,
   hours FLOAT
 );
 

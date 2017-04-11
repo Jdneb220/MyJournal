@@ -1,0 +1,98 @@
+body, .modal-content{
+  background-color: #1e88e5;
+  text-align: center;
+}
+
+.modal{
+  background-color: transparent;
+}
+
+.container{
+  margin-top:8em;
+}
+
+#journal_entry{
+  margin: 4vw;
+}
+.myRed{
+   background-color: #D7263D;
+}
+
+#update_button{
+    width: 0px;
+    padding: 0px 8px 0px 27px;
+    border-radius: 50%;
+    position: absolute;
+    margin: -15px 0px 0px 5px;
+}
+
+h1{font-size: 6vw;}
+h2{font-size: 3vw;}
+h3{font-size: 3vw;}
+h4{font-size: 2vw;}
+h5{font-size: 1.4vw;}
+
+/*
+@media (min-width: 501px) and (max-width: 960px){
+h1{font-size: 8vw;}
+h2{font-size: 5vw;}
+h3{font-size: 4vw;}
+h4{font-size: 3vw;}
+h5{font-size: 2vw;}
+}
+*/
+
+@media (max-width: 500px){
+h1{font-size: 10vw;}
+h2{font-size: 8vw;}
+h3{font-size: 6vw;}
+h4{font-size: 4vw;}
+h5{font-size: 3vw;}
+}
+
+h1, h2, h3, h4, h5, p, label, input, textarea, td, th{
+color: #ffffff;
+}
+
+input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
+  border-bottom: 1px solid #ffffff;
+}
+
+a {
+  color: #FFE74C;
+  text-decoration: underline;
+}
+
+nav a, .toolbar a, .modal-footer a {
+  text-decoration: none;
+}
+
+
+
+
+
+input[type=range] {
+    border: none;
+    background: white;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  background: white;
+  border: none;
+}
+input[type=range]::-moz-range-track {
+  background: white;
+  border: none;
+}
+input[type=range]::-ms-track {
+  background: white;
+  border: none;
+}
+input[type=range]::-ms-fill-lower {
+  background: white;
+  border: none;
+}
+input[type=range]::-ms-fill-upper {
+  background: white;
+  border: none;
+}
+
