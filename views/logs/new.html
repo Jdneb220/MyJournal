@@ -1,42 +1,58 @@
 
   <style>
-  h3, #log-pg-1, #log-pg-2{
+  h2, #log-pg-1, #log-pg-2, #flippage_btn{
     display:none;
+  }
+
+  #date{
+    margin: 1em;
   }
 
   </style>
 
 
 
-  <h3>Let's make a journal entry</h3>
-  <form method="POST" action="/log/new/{{id}}">
+  <h2>Let's record a log:</h2>
+  <form id="new_log_form" method="POST" action="/log/new/{{id}}">
     <div id="log-pg-1">
-      <label for="date">Cool!  When's the last time you <!--rode on-->did the {{name}}?</label>
-      <input type="date" name="date" id="date" class="datepicker">
-      <label for="hours">and for how many hours?</label>
+      <label for="date">When's the last time you <!--rode on-->did the {{name}}?<br>
+      <button type="date" id="date" class="btn datepicker">Choose a Date</button>
+      <input id="hidden_date" type="hidden" name="date">
+      </label>
+      <br clear="all">
+      <label for="hours">and for how many hours?
       <p class="range-field">
         <input type="range" name="hours" min="0" max="24" step="0.5" value="2" id="hours" />
       </p>
-      <a href="#" onClick="flippage()" class='btn'>Continue</a>
+      </label>
+      <a href="#" id="flippage_btn" onClick="flippage()" class='btn'>Continue</a>
     </div>
     <div id="log-pg-2">
-      <label for="info">Neat!  Jot some notes about your journal entry.  You can also give it a <a href="typeModal">category</a>.</label>
-      <input type="text" name="info" id="info" />
+      <label for="info">Neat!  Jot some notes about your journal entry.  <!--You can also give it a <a href="typeModal">category</a>.-->
+      <input type="text" name="info" id="info"/>
+      </label>
+      <input class='btn' type="submit" value="Create a Log Entry">
+
+      <!--
       <select name="type" id="type">
         <option value="Recreational">Recreational</option>
         <option value="Competitive">Competitive</option>
         <option value="Practice">Practice</option>
         <option value="Clinic/Lessons">Clinic/Lessons</option>
       </select>
-            <input class='btn' type="submit" value="Create a Log Entry">
+          -->
+
     </div>
   </form>
 
 
 <script>
-  setTimeout(function(){
-      $('h3').fadeIn().addClass('magictime boingInUp');
-  }, 1000);
+
+  $("#info").on("keydown", function(x){
+    if (x.which === 13)
+      $("#new_log_form").submit()
+  })
+
   setTimeout(function(){
       $('#log-pg-1').fadeIn().addClass('magictime boingInUp');
       setTimeout(function(){
@@ -45,7 +61,7 @@
         console.log($('input[type=range]').width(), ",", $('input[type=range]').attr('max'))
         $('.thumb').addClass('active').css('left', 2*$('input[type=range]').width() / $('input[type=range]').attr('max')-1);
       },200)
-  }, 1500);
+  }, 900);
 
 
 

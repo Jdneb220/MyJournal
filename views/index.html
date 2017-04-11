@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>HART</title>
+  <title>MyJournal</title>
   <link rel="stylesheet" href="">
 <!--Import Google Icon Font-->
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -28,16 +28,6 @@
     <source src="1.mp4" type="video/mp4">
 </video>
 
-<div class="fixed-action-btn toolbar">
-    <a class="btn-floating btn-large myRed"">
-      <i class="large material-icons">view_headline</i>
-    </a>
-    <ul>
-      <li class="waves-effect waves-light"><a href="/journals/new"><i class="material-icons">library_add</i>Add a Journal</a></li>
-      <li class="waves-effect waves-light"><a href="/badges/"><i class="material-icons">mode_edit</i> Record a log</a></li>
-      <li class="waves-effect waves-light"><a href="/logout"><i class="material-icons">call_made</i>Logout</a></li>
-    </ul>
-  </div>
 
   <!--
   <nav>
@@ -54,13 +44,24 @@
 
   <div class="container">
   <h1>Welcome to MyJournal</h1>
-  <p>Track your daily activities over time, share what you do with others, and earn achivements for hours logged.</p>
+  <p class="flow-text">Track your daily activities, share what you do with others, and earn achivements for hours logged.</p>
   <!--
   <h2>Horse and Rider Together Program</h2>
   <p>Created and maintained by the United States Dressage Federation, Horse and Rider Together or HART is a tool for all members to record and share their daily riding activities. The online training journal allows participants to track their rides over time, share how their ride went with friends and earn achievements based on the number of hours spent in the saddle.</p>
   -->
 
   {{#logged_in}}
+    <div class="fixed-action-btn toolbar">
+      <a class="btn-floating btn-large myPink"">
+        <i class="large material-icons">view_headline</i>
+      </a>
+      <ul>
+        <li class="waves-effect waves-light"><a href="/journals/new"><i class="material-icons">library_add</i>Add a Journal</a></li>
+        <li class="waves-effect waves-light"><a href="/badges/"><i class="material-icons">mode_edit</i> Record a log</a></li>
+        <li class="waves-effect waves-light"><a href="/logout"><i class="material-icons">call_made</i>Logout</a></li>
+      </ul>
+    </div>
+
     <h2>Welcome {{name}}!</h2>
 
     <div id="journals">
@@ -71,7 +72,13 @@
 
 
   {{^logged_in}}
-  <form method="POST" action="/login">
+    {{#err}}
+      <script>
+        Materialize.toast('{{err}}', 4000, 'myRed')
+      </script>
+    {{/err}}
+
+  <form id="login_form" method="POST" action="/login">
     <label for="email">Email
     <input type="text" name="email" id="email" value="jdneb@hotmail.com"/>
     </label>
@@ -79,10 +86,27 @@
     <input type="password" name="password" id="password" value="password"/>
     </label>
     <input class='btn' type="submit" value="Submit" />
+    <p id="signup_p">Not a member? <a onclick="showSignupForm()">Sign Up!</a></p>
   </form>
-  <p>Not a member? <a href="/signup">Sign Up!</a></p>
+
   {{/logged_in}}
 
   </div>
 </body>
+<script>
+  let showSignupForm = function(){
+    $.ajax({
+          url: "/signup/form",
+          method: "GET",
+          cache: false,
+          success: function(html) {
+            $(".container").css('min-height', $(".container").css('height'))
+            $("#login_form").fadeOut()
+            setTimeout(function(){
+              $(".container").append($(html).fadeIn())
+            }, 500)
+          }
+      })
+  }
+</script>
 </html>

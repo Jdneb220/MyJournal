@@ -1,4 +1,3 @@
-<h2>Logs:</h2>
 
 <table class='centered'>
 <thead>
@@ -7,7 +6,7 @@
 <tbody>
   {{#logs}}
     <tr><td>{{date}}</td><td>{{hours}}</td><!--<td>{{type}}</td>--><td>{{info}}</td><td>
-      <form method="POST" action="/log/{{id}}?_method=DELETE">
+      <form class="delete_log" method="POST" action="/log/{{id}}?_method=DELETE">
         <button class='btn' type="submit">Delete</button>
       </form>
     </td></tr>
@@ -17,3 +16,17 @@
   {{/logs}}
 </tbody>
 </table>
+
+<script>
+  $('.delete_log').submit(function(e){
+    e.preventDefault();
+    console.log("firing")
+    $.ajax({
+      method: "POST",
+      url: $(this).attr('action'),
+      success: function(){
+        loadLogs()
+      }
+    })
+  });
+</script>

@@ -3,47 +3,58 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>HART</title>
+  <title>MyJournal</title>
   <link rel="stylesheet" href="">
+<!--Import Google Icon Font-->
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="/css/benmaterialize.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/magic/magic.min.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/style.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="/css/home.css"  media="screen,projection"/>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
+
 <body>
-  <h1>Welcome to HART</h1>
-  <h2>Horse and Rider Together Program</h2>
-  {{#err}}<h3>{{err}}</h3>{{/err}}
-  <p>Let's create a profile</p>
-
-  <form method="POST" action="/signup">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" />
-
-    <label for="email">Email</label>
-    <input type="text" name="email" id="email" />
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" />
-    <input type="submit" value="Submit" />
-  </form>
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/materialize.js"></script>
+  <script src="/js/scripts.js" type="text/javascript"></script>
 
 
+ <video playsinline autoplay muted loop poster="1.png" id="bgvid">
+    <source src="1.mp4" type="video/mp4">
+</video>
+
+
+  <div class="container">
+
+
+  </div>
+
+    {{#err}}
+      <div class='card-panel myRed'>
+        {{err}}
+      </div>
+    {{/err}}
 </body>
-
-<script src="/js/jquery.js" type="text/javascript"></script>
-
 <script>
-  function isEmail(email) {
-    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    return regex.test(email);
-  }
 
-  $('form').submit(function(e){
-    if (!isEmail($('#email').val())){
-      e.preventDefault()
-      alert('not a valid email')
-    }
-    else if ($('#password').val().length < 8){
-      e.preventDefault()
-      alert('password should be at least 8 characters')
-    }
-  })
+    $.ajax({
+          url: "/signup/form",
+          method: "GET",
+          cache: false,
+          success: function(html) {
+            $(".container").css('min-height', $(".container").css('height'))
+            $("#login_form").fadeOut()
+            setTimeout(function(){
+              $(".container").append($(html).fadeIn())
+            }, 500)
+          }
+      })
+
 </script>
-
 </html>
+

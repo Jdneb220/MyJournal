@@ -1,4 +1,5 @@
 const express = require('express');
+const expressSanitizer = require('express-sanitizer');
 const app = express();
 var methodOverride = require('method-override')
 
@@ -19,6 +20,7 @@ app.use("/", express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
+app.use(expressSanitizer());
 
 app.use(session({
   secret: 'HART',
@@ -65,7 +67,7 @@ app.post('/login', function(req, res){
                 res.redirect("/")
               }
               else{
-                res.send("Authorization Failed: Invalid email/password")
+                res.render('index', {err:'Authentication failed.  Email/password incorrect'})
               }
 
           }
@@ -109,7 +111,7 @@ app.get('/journal/:id', function(req, res){
 
 app.put('/journal/:id', function(req,res){
   db
-    .none("SELECT * FROM horses WHERE name = $1;", [req.body.name])
+    .none("SELECT * FROM horses WHERE name = $1 AND person_id = $2;", [req.body.name, req.session.user.id])
     .then(function(){
       db
       .none("UPDATE horses SET name = $1 WHERE id = $2;", [req.body.name, parseInt(req.params.id)])
@@ -117,7 +119,7 @@ app.put('/journal/:id', function(req,res){
         res.send('fail.')
       })
       .then(function(){
-        res.redirect('/')
+        res.redirect('/journal/' + parseInt(req.params.id))
       })
     })
     .catch(function(){
@@ -190,7 +192,7 @@ app.post('/journals', function(req, res){
 app.get('/logs', function(req, res){
   if(req.session.user)
     db
-      .any("SELECT * FROM rides WHERE person_id = $1;", [req.session.user.id])
+      .any("SELECT * FROM rides WHERE person_id = $1 ORDER BY date DESC;", [req.session.user.id])
       .then(function(data){
           let view_data = {
             logs: data
@@ -207,7 +209,7 @@ app.get('/logs', function(req, res){
 app.get('/logs/:id', function(req, res){
   if(req.session.user)
     db
-      .any("SELECT * FROM rides WHERE person_id = $1 and horse_id = $2;", [req.session.user.id, parseInt(req.params.id)])
+      .any("SELECT * FROM rides WHERE person_id = $1 and horse_id = $2 ORDER BY date DESC;", [req.session.user.id, parseInt(req.params.id)])
       .then(function(data){
           let view_data = {
             logs: data
@@ -231,7 +233,7 @@ app.post('/log/new/:id', function(req, res){
     let data = req.body
     db.tx(t => {
       let queries = [
-        t.one("INSERT INTO rides (horse_id, person_id, date, hours, info, type) VALUES ($1, $2, $3, $4, $5, $6) returning id;", [parseInt(req.params.id), req.session.user.id, data.date, data.hours, data.info, data.type]),
+        t.one("INSERT INTO rides (horse_id, person_id, date, hours, info, type) VALUES ($1, $2, $3, $4, $5, $6) returning id;", [parseInt(req.params.id), req.session.user.id, data.date, data.hours, req.sanitize(data.info), data.type]),
       ]
       return t.batch(queries)
       })
@@ -331,6 +333,10 @@ app.get('/log/:id', function(req, res){
 
 app.get('/signup', function(req, res){
   res.render('signup/index');
+});
+
+app.get('/signup/form', function(req, res){
+  res.render('signup/form');
 });
 
 

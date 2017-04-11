@@ -8,4 +8,7 @@ $(function() {
       $( "#journals" ).append( html );
     });
 
+  setTimeout(function(){
+    $('.card-panel.myRed').fadeOut()
+  }, 2000)
 });

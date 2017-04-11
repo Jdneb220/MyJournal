@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
+  <title>MyJournal</title>
   <link rel="stylesheet" href="">
   <!--Import Google Icon Font-->
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -25,7 +25,7 @@
 
 
 <div class="container">
-<h1>{{journal.name}} <a id="update_button" class="btn waves-effect waves-light" href="#modal1"><i class="material-icons right">mode_edit</i></a>
+<h1>{{journal.name}} <a id="update_button" onclick='$("#are_you_sure").hide(); $("#journal_delete_btn").show();'class="btn waves-effect waves-light" href="#modal1"><i class="material-icons right">mode_edit</i></a>
 </h1>
 
 
@@ -41,10 +41,13 @@
 
     </div>
     <div class="modal-footer">
-      <a onclick="$('#journal_update').submit
-      ()" class="waves-effect waves-green btn-flat">Update</a>
-      <a onclick='$("#journal_delete").submit
-      ()' class="waves-effect waves-red btn-flat">Delete</a>
+      <a id="journal_delete_btn" onclick='$(this).fadeOut(); setTimeout(function(){$("#are_you_sure").show();},500)' class="waves-effect waves-red btn-flat">Delete</a>
+      <a id="are_you_sure" onclick='$("#journal_delete").submit
+      ()' class="waves-effect waves-red btn-flat red"  style="color:white">Are you sure?</a>
+
+      <a id="update_btn" onclick="$('#journal_update').submit
+      ()" class="waves-effect waves-green btn-flat green">Update</a>
+
     </div>
   </div>
 
@@ -59,7 +62,7 @@
 </div>
 
  <div class="fixed-action-btn">
-    <a class="btn-floating btn-large myRed">
+    <a class="btn-floating btn-large myPink">
       <i class="large material-icons">view_headline</i>
     </a>
     <ul>
@@ -72,20 +75,42 @@
 
 </body>
 <script>
-$(function() {
-
-  $('.modal').modal();
-
-
-  $.ajax({
+let loadLogs = function(){
+    $.ajax({
       url: "/logs/{{journal.id}}",
       method: "GET",
       cache: false,
       success: function(html) {
-        $("#journal_logs").append( html ).addClass('magictime boingInUp');
+
+        setTimeout(function(){
+
+          $("#journal_logs").removeClass('magictime boingInUp').html( html )
+          $("#journal_logs").addClass('magictime boingInUp');
+          $('h2').fadeIn().addClass('magictime boingInUp');
+
+        }, 300);
         console.log('here');
       }
   })
+}
+
+$(function() {
+
+  $('.modal').modal()
+  $("#update_btn").hide()
+  $("#are_you_sure").hide()
+
+  $('#name').on("keydown keyup", function(input){
+    if ($(this).val() !== "" && $(this).val().toLowerCase() !== "{{journal.name}}".toLowerCase())
+      $("#update_btn").css('margin-right','10px').show()
+    else {
+      $("#update_btn").fadeOut()
+      if (input.which === 13)
+        return false;
+    }
+  })
+
+  loadLogs()
 
   $.ajax({
       url: "/logs/new/{{journal.id}}",
@@ -100,6 +125,15 @@ $(function() {
                 if ( 'select' in arg ){ //prevent closing on selecting month/year
                     this.close();
                 }
+            },
+            onClose: function(val){
+              if (this.get() !== ""){
+                $('#date').text(this.get("value", "mmmm dd, yyyy"))
+                $('#hidden_date').val(this.get())
+                $('#flippage_btn').css('display', 'inline-block')
+              }
+              else
+                $('#flippage_btn').hide()
             },
             selectMonths: false, // Creates a dropdown to control month
 
@@ -125,6 +159,7 @@ $(function() {
       $('#log-pg-1').addClass('spaceOutLeft').hide();
       setTimeout(function(){
         $('#log-pg-2').show().addClass('magictime spaceInRight');
+        $('#info').focus()
       }, 200)
   }
 
