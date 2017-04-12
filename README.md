@@ -9,12 +9,12 @@ While HART is aimed primarily for equestrians, MyJournal takes the existing mode
 
 
 ## Approach Taken and Planning Phase
-![erdm](hard models.png)
+![erdm](hard_models.png)
 I started by sketching and creating an ERDM for my database
 The framework sketches gave me an idea of user flow and routes that would need created
 As the routes developed, I applied iterative testing to see what kinds of user inputs and form submissions would cause the application to break.  Bcrypt, Sanitize and Validate nodes were installed to handle SQL injection attacks.  
 Once the routes and forms were created, next came styling.  I wanted a colorful background and accents with minimal user interface.  A bold palette was chosen complimented by the tranquil video background.  When possible I accounted for accessibility issues by using labels and appropriate class and ID tags.  Additional Javascript and jQuery functionality was added to make navigation and form completion more seamless.  I relied on the convenience of buttons and CSS animations to enchance user experience.
-![colors](color palette.png)
+![colors](color_palette.png)
 With styling complete, I then spent a large portion of time working with the Google Graphs API.  The hardest part was modifying the model data to meet the Google Graph API needs.  I look forward to playing more with Google Graphs to create more visual data.
 
 ## Technologies Used
