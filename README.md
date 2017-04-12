@@ -2,6 +2,8 @@
 
 ![bg](public/1.png)
 
+Live version accessible at http://myjournal.benjamindejes.us
+
 ## Introduction
 MyJournal is a prototype framework of an existing journaling product I created for the United States Dressage Foundation. The Horse and Rider Together Program, fondly referred to as HART, allows horse enthusiasts to manage horse data, track riding details, and earn badges based on the number of hours spent in the saddle.
 
