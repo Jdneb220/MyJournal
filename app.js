@@ -442,7 +442,7 @@ app.get('/stats/users', function(req, res){
       let queries = [
         t.one("SELECT COUNT(*) AS count FROM persons;"),
         t.one("SELECT COUNT(*) AS count FROM horses;"),
-        t.one("SELECT COUNT(*) AS count FROM rides;")
+        t.one("SELECT COUNT(*) AS count, SUM(hours) AS total_hours FROM rides;")
       ]
       return t.batch(queries)
       })
@@ -450,7 +450,8 @@ app.get('/stats/users', function(req, res){
           let view_data = {
             num_users: data[0].count,
             num_journals: data[1].count,
-            num_logs: data[2].count
+            num_logs: data[2].count,
+            total_hours: data[2].total_hours
           }
           res.render('stats/users', view_data)
         }
