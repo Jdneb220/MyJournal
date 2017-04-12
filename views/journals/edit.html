@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>MyJournal</title>
-  <link rel="stylesheet" href="">
+
   <!--Import Google Icon Font-->
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Import materialize.css-->
@@ -92,7 +92,7 @@ let loadLogs = function(){
           $('h2').fadeIn().addClass('magictime boingInUp');
 
         }, 300);
-        console.log('here');
+        //console.log('here');
       }
   })
 }
@@ -121,7 +121,7 @@ $(function() {
       cache: false,
       success: function(html) {
         $("#journal_entry").append( html );
-        console.log('here');
+        //console.log('here');
         let $input = $('.datepicker').pickadate({
             format: 'mmmm d, yyyy',
             onSet: function( arg ){
@@ -150,11 +150,6 @@ $(function() {
       }
   })
 
-/*
-  setTimeout(function(){
-      $('#journal_entry').fadeIn().addClass('magictime boingInUp');
-  }, 1000);
-*/
 
 })
 
