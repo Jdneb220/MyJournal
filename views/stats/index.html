@@ -46,14 +46,18 @@
 
            temp.push(new Date(x[1],x[2]-1,x[3]))
            temp.push(x[0])
-           if(x[1] === array2[array2_i][1]
-            && x[2] === array2[array2_i][2]
-            && x[3] === array2[array2_i][3]){
-              temp.push(array2[array2_i][0])
-              array2_i++
-            }
-           else
+           if (array2_i >= array2.length)
             temp.push(0)
+           else{
+             if(x[1] === array2[array2_i][1]
+              && x[2] === array2[array2_i][2]
+              && x[3] === array2[array2_i][3]){
+                temp.push(array2[array2_i][0])
+                array2_i++
+              }
+             else
+              temp.push(0)
+           }
            answer.push(temp)
          })
 
@@ -65,14 +69,18 @@
 
         let JSON_data1 = '{{myHoursPerJournal}}'
 
+        if (JSON_data1 === '')
+          JSON_data1 = "[0,&quot;No Journals&quot;]"
+
+
         JSON_data1 = JSON_data1.replace(/&quot;/gi, '"');
+
 
         var array1 = JSON.parse("[" + JSON_data1 + "]");
 
         let answer = [['Journals', 'Hours']]
          array1.forEach(function(x, index){
            temp = [];
-
            temp.push(x[1])
            temp.push(x[0])
            answer.push(temp)
@@ -146,7 +154,7 @@
 
 
 <div class="container">
-
+{{myHoursPerJournal}}
 <h1>About MyJournal</h1>
 <p class='flow-text'>MyJournal is a prototype framework of an existing journaling product I created for the United States Dressage Foundation. The Horse and Rider Together Program, fondly referred to as HART, allows horse riders to manage horse data, track riding details, and earn <a href="/badges">badges</a> based on the number of hours spent in the saddle.</p>
 <p class='flow-text'>Since HART is aimed at a very specific group of users, I modified the prototype MyJournal to appeal to a greater audience and serve a more utilitarian purpose.  I hope you enjoy it!</p>

@@ -131,11 +131,12 @@ app.delete('/journal/:id', function(req,res){
      db
       .one("DELETE FROM horses WHERE id = $1 returning name;", [parseInt(req.params.id)])
       .then(function(deleted_journal){
-          console.log(deleted_journal.name)
+          //console.log(deleted_journal.name)
           res.redirect('/')
       })
       .catch(function(x){
-        console.log(x)
+         console.log('error deleting journal', x)
+         res.redirect('/')
       })
   else
     res.send('<a href="/">please log in</a>')
@@ -165,7 +166,7 @@ app.get('/journals/new', function(req, res){
 
 app.post('/journals', function(req, res){
   let data = req.body
-  console.log(data)
+  //console.log(data)
   db
     .none("SELECT * FROM horses WHERE LOWER(name) = LOWER($1) AND person_id = $2;", [data.name, req.session.user.id])
     .then(function(){
@@ -279,11 +280,12 @@ app.delete('/log/:id', function(req,res){
      db
       .one("DELETE FROM rides WHERE id = $1 returning horse_id;", [parseInt(req.params.id)])
       .then(function(deleted_ride){
-        console.log(deleted_ride.horse_id)
+        //console.log(deleted_ride.horse_id)
           res.redirect('/journal/' + deleted_ride.horse_id)
       })
       .catch(function(x){
-        console.log(x)
+        console.log('error deleting log', x)
+        res.redirect('/')
       })
   else
     res.send('<a href="/">please log in</a>')
@@ -320,7 +322,7 @@ let createAccount = function(req, res, user){
   if (validator.isEmail(user.email) || user.password.length < 8)
   bcrypt
       .hash(user.password, 10, function(err, hash){
-       console.log(hash)
+
         db
         .one(
           "INSERT INTO persons (name, email, password) VALUES ($1, $2, $3) returning *;", [user.name, user.email, hash]
@@ -329,15 +331,16 @@ let createAccount = function(req, res, user){
           console.log('account created')
 
           req.session.user = user
-          console.log('req.session.user=',req.session.user)
+          //console.log('req.session.user=',req.session.user)
           res.redirect("/journals/new")
         })
         .catch(function(){
           console.log('error creating account')
+          res.redirect('/')
         })
       })
   else
-    console.log('invalid email or password')
+    res.render("signup/index", {err:"Invalid email or password"})
 }
 
 app.post('/signup', function(req, res){
@@ -355,7 +358,6 @@ app.post('/signup', function(req, res){
       createAccount(req, res, user_data)
     })
     .catch(function(){
-      console.log
       res.render("signup/index", {err:"Email already exists in the database"})
     })
 })
@@ -384,7 +386,7 @@ app.get('/badges/my', function(req, res){
       )
   }
   else{
-    console.log('not logged in')
+    res.redirect("/")
   }
 });
 
