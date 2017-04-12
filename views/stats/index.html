@@ -39,13 +39,21 @@
         var array1 = JSON.parse("[" + JSON_data1 + "]");
         var array2 = JSON.parse("[" + JSON_data2 + "]");
 
+        let array2_i = 0
         let answer = [['Date', 'All Users', 'Me']]
          array1.forEach(function(x, index){
            temp = [];
 
            temp.push(new Date(x[1],x[2]-1,x[3]))
            temp.push(x[0])
-           temp.push(array2[index][0])
+           if(x[1] === array2[array2_i][1]
+            && x[2] === array2[array2_i][2]
+            && x[3] === array2[array2_i][3]){
+              temp.push(array2[array2_i][0])
+              array2_i++
+            }
+           else
+            temp.push(0)
            answer.push(temp)
          })
 
@@ -88,7 +96,7 @@
           curveType: 'function',
           legend: { position: 'bottom' },
 
-          vAxis: {title: 'Hours Logged', titleTextStyle: {color: 'red'}},
+          vAxis: {title: 'Hours Logged', titleTextStyle: {color: 'red'}, minValue: 0},
           pointSize: 5
         };
 
@@ -105,8 +113,7 @@
 
         var options = {
           curveType: 'function',
-          legend: { position: 'bottom' },
-          pointSize: 5
+          legend: { position: 'bottom' }
         };
 
         var chart2 = new google.visualization.BarChart(document.getElementById('chart_div2'));
@@ -151,7 +158,7 @@
 
 <h3>Hours Logged Per Day</h3>
 <div id="chart_div" class="chart"></div>
-<h3>My Hours Per Joural</h3>
+<h3>My Hours Per Journal</h3>
 <div id="chart_div2" class="chart"></div>
 
 <p>

@@ -73,7 +73,7 @@ app.post('/login', function(req, res){
         )
     })
     .catch(function(){
-      res.send("Authorization Failed: Invalid email/password")
+      res.render('index', {err:'Authentication failed.  Email/password incorrect'})
     })
 });
 

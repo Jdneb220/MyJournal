@@ -1,6 +1,6 @@
 $(function() {
   $.ajax({
-      url: "journals",
+      url: "/journals",
       mathod: "GET",
       cache: false
     })
