@@ -273,29 +273,6 @@ app.get('/logs/new/:id', function(req, res){
     res.send('<a href="/">please log in</a>')
 })
 
-app.get('/logs/new', function(req, res){
-  res.send('please select a <a href="/journals/">journal</a>')
-  // if(req.session.user)
-  //   db
-  //     .any("SELECT * FROM horses WHERE person_id = $1;", [req.session.user.id])
-  //     .then(function(data){
-  //       let view_data = {
-  //         name: 'Select a journal',
-  //         journals: data
-  //       }
-  //       console.log(view_data)
-  //       res.render('logs/new', view_data);
-  //     })
-  //     .catch(function(){
-  //       res.send('No journals yet.  Please <a href="/journals/">create a journal</a>')
-  //     })
-  // else
-  //   res.send('<a href="/">please log in</a>')
-})
-
-app.put('/log/:id', function(req,res){
-        // t.one("INSERT INTO rides (horse_id, person_id, date, hours, info, type) VALUES horse_id = $1, person_id = $2, date = $3 hours = $4, info = $5, type = $6", [data.horse_id, req.session.user.id, data.date, data.hours, data.info, data.type]),
-})
 
 app.delete('/log/:id', function(req,res){
   if(req.session.user)
@@ -428,7 +405,7 @@ app.get('/badges/', function(req, res){
 
 /* STATS / GOOGLE CHARTS */
 
-app.get('/stats/index', function(req, res){
+app.get('/stats/', function(req, res){
     if(req.session.user){
     db
       .tx(t => {
@@ -453,7 +430,7 @@ app.get('/stats/index', function(req, res){
       })
     }
     else
-      res.send('please log in')
+      res.send('<a href="/">please log in</a>')
 });
 
 

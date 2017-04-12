@@ -13,7 +13,7 @@ $(function() {
   }, 2000)
 
   $.ajax({
-      url: "stats/users",
+      url: "/stats/users",
       mathod: "GET",
       cache: false
     })

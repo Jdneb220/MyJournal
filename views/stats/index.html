@@ -20,6 +20,8 @@
   <script type="text/javascript" src="/js/jquery.js"></script>
   <script type="text/javascript" src="/js/materialize.js"></script>
 
+   <script src="/js/scripts.js" type="text/javascript"></script>
+
   <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -122,6 +124,11 @@
 
     </script>
 
+<style>
+.card-panel h3{
+  color: #222;
+}
+</style>
 </head>
 
 <body>
@@ -132,42 +139,28 @@
 
 
 <div class="container">
-{{logsPerDay}}
-<br>
-{{myLogsPerDay}}
-<br>
-{{myHoursPerJournal}}
-<br><br>
+
+<h1>About MyJournal</h1>
+<p class='flow-text'>MyJournal is a prototype framework of an existing journaling product I created for the United States Dressage Foundation. The Horse and Rider Together Program, fondly referred to as HART, allows horse riders to manage horse data, track riding details, and earn <a href="/badges">badges</a> based on the number of hours spent in the saddle.</p>
+<p class='flow-text'>Since HART is aimed at a very specific group of users, I modified the prototype MyJournal to appeal to a greater audience and serve a more utilitarian purpose.  I hope you enjoy it!</p>
+
+<div class='card-panel'>
+<div id="user_stats">
+    </div>
+</div>
 
 <h3>Hours Logged Per Day</h3>
 <div id="chart_div" class="chart"></div>
 <h3>My Hours Per Joural</h3>
 <div id="chart_div2" class="chart"></div>
 
+<p>
+<a class='btn large waves-effect waves-light' href="/">Home</a>
+</p>
 
 </div>
 
-<script>
-/*
-let data = {{data}}
-let JSON = data.map(function(x){return x.info + ',' +x.hours})
-$('.container').append(JSON)
-*/
-</script>
-
-<!--Div that will hold the pie chart-->
 
 
 </body>
-
-<script>
-/*
-  $.ajax({
-  dataType: "json",
-  url: url,
-  data: data,
-  success: success
-});*/
-
-</script>
 </html>

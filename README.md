@@ -12,3 +12,5 @@ validator - email validation
 bcrypt - hashed passwords
 express-session - user cookies
 express-sanitizer - for text input
+
+API google charts: https://google-developers.appspot.com/chart/

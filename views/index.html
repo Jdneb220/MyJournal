@@ -44,7 +44,7 @@
 
   <div class="container">
   <h1>Welcome to MyJournal</h1>
-  <p class="flow-text">Track your daily activities, share what you do with others, and earn achivements for hours logged.</p>
+  <p class="flow-text">Track your daily activities and share what you do with others<!--, and earn achivements for hours logged-->.</p>
   <!--
   <h2>Horse and Rider Together Program</h2>
   <p>Created and maintained by the United States Dressage Federation, Horse and Rider Together or HART is a tool for all members to record and share their daily riding activities. The online training journal allows participants to track their rides over time, share how their ride went with friends and earn achievements based on the number of hours spent in the saddle.</p>
@@ -57,8 +57,8 @@
       </a>
       <ul>
         <li class="waves-effect waves-light"><a href="/journals/new"><i class="material-icons">library_add</i>Add a Journal</a></li>
-        <li class="waves-effect waves-light"><a href="/badges/"><i class="material-icons">mode_edit</i> Record a log</a></li>
-        <li class="waves-effect waves-light"><a href="/logout"><i class="material-icons">call_made</i>Logout</a></li>
+        <li class="waves-effect waves-light"><a href="/stats/"><i class="material-icons">trending_up</i> User Statistics</a></li>
+        <li class="waves-effect waves-light"><a href="/logout"><i class="material-icons">power_settings_new</i>Logout</a></li>
       </ul>
     </div>
 
@@ -83,10 +83,10 @@
 
   <form id="login_form" method="POST" action="/login">
     <label for="email">Email
-    <input type="text" name="email" id="email" value="jdneb@hotmail.com"/>
+    <input type="text" name="email" id="email" />
     </label>
     <label for="password">Password
-    <input type="password" name="password" id="password" value="password"/>
+    <input type="password" name="password" id="password" />
     </label>
     <input class='btn' type="submit" value="Submit" />
     <p id="signup_p">Not a member? <a onclick="showSignupForm()">Sign Up!</a></p>
