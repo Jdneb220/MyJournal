@@ -19,7 +19,7 @@ Once the routes and forms were created, next came styling.  I wanted a colorful 
 With styling complete, I then spent a large portion of time working with the Google Graphs API.  The hardest part was modifying the model data to meet the Google Graph API needs.  I look forward to playing more with Google Graphs to create more visual data.
 
 ## Technologies Used
-- HTML/CSS
+- HTML/CSS/SASS
 - POSTGRESQL/PSQL
 - Javascript
 - jQuery
