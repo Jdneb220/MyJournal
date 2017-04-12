@@ -9,7 +9,7 @@ While HART is aimed primarily for equestrians, MyJournal takes the existing mode
 
 
 ## Approach Taken and Planning Phase
-![erdm](hard_models.png)
+![erdm](hart_models.png)
 I started by sketching and creating an ERDM for my database
 The framework sketches gave me an idea of user flow and routes that would need created
 As the routes developed, I applied iterative testing to see what kinds of user inputs and form submissions would cause the application to break.  Bcrypt, Sanitize and Validate nodes were installed to handle SQL injection attacks.  
